@@ -1,12 +1,15 @@
 from PIL import Image
 from PIL import ImageFont
 from PIL import ImageDraw
+import pilgram
 import requests
+
+from post2IG import upload_post
 
 # https://stackoverflow.com/questions/2563822/how-do-you-composite-an-image-onto-another-image-with-pil-in-python
 # https://www.geeksforgeeks.org/python-pil-image-resize-method/
 
-def CreateAd(img, cost, condition, ref):
+def CreateAd(title, img, cost, condition, ref, isbn):
 
     response = requests.get(img)
 
@@ -63,4 +66,11 @@ def CreateAd(img, cost, condition, ref):
     draw.text((text_x, ref_label_y), "Ref:", (2555,255,255), font=font58)
     draw.text((text_x, ref_y), ref, (2555,255,255), font=font90)
 
-    bg.show()
+    # bg.show()
+
+    new_im = bg.convert("RGB")
+
+    pilgram.clarendon(new_im).save("images/upload.jpg")
+
+    return upload_post( f"The following book is for sale:\n\n{title}\n\nISBN: {isbn}" )
+    

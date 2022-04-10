@@ -29,6 +29,7 @@ from dotenv import load_dotenv
 import os
 from ad_create import CreateAd
 from notion_sync import NotionSync
+from post2IG import clean_up
 
 load_dotenv()
 
@@ -50,21 +51,34 @@ for book in books:
     url=book["properties"]["img"]["files"][0]["file"]["url"]
     title=book["properties"]["Name"]["title"][0]["text"]["content"]
     ref=  book["properties"]["Ref"]["rich_text"][0]["text"]["content"]
+    isbn=book["properties"]["ISBN"]["rich_text"][0]["text"]["content"]
     condition=  book["properties"]["Condition"]["select"]["name"]
     cost =  book["properties"]["Price"]["number"]
     posted = book["properties"]["Posted"]["checkbox"]
+    pId= book["id"]
 
     if (posted==False):
         print(title, 
         # printing the isbn
-        # book["properties"]["ISBN"]["rich_text"][0]["text"]["content"], 
+        # book["properties"]["ISBN"]["rich_text"][0]["text"]["content"],
+        
+        # page id...
+        pId, 
 
         # printing the img link
         url,
 
         sep="\n\n", end="\n\n")
 
-        CreateAd(img=url, cost=cost, condition=condition, ref=ref)
+        if CreateAd(title=title, img=url, cost=cost, condition=condition, ref=ref, isbn=isbn):
+            if nsync.update_page(integration_token=os.getenv("AUTH_TOKEN"), id=pId, dataParam={"properties":{"Posted":{"checkbox":True}}}):
+                print("Ad created successfully")
+            else:
+                print("Could not update notion")
+        else:
+            print("Could not create Ad.")
+
+        # clean_up()
 
     else:
         noPosted+=1
