@@ -27,6 +27,7 @@
 
 from dotenv import load_dotenv
 import os
+from ad_create import CreateAd
 from notion_sync import NotionSync
 
 load_dotenv()
@@ -42,19 +43,43 @@ print(keys)
 
 books = data["results"]
 
+noPosted = 0
+
 for book in books:
-    print(book["properties"]["Name"]["title"][0]["text"]["content"], 
-    # printing the isbn
-    # book["properties"]["ISBN"]["rich_text"][0]["text"]["content"], 
 
-    # printing the img link
-    book["properties"]["img"]["files"][0]["file"]["url"],
+    url=book["properties"]["img"]["files"][0]["file"]["url"]
+    title=book["properties"]["Name"]["title"][0]["text"]["content"]
+    ref=  book["properties"]["Ref"]["rich_text"][0]["text"]["content"]
+    condition=  book["properties"]["Condition"]["select"]["name"]
+    cost =  book["properties"]["Price"]["number"]
+    posted = book["properties"]["Posted"]["checkbox"]
 
-    sep="\n\n", end="\n\n")
+    if (posted==False):
+        print(title, 
+        # printing the isbn
+        # book["properties"]["ISBN"]["rich_text"][0]["text"]["content"], 
+
+        # printing the img link
+        url,
+
+        sep="\n\n", end="\n\n")
+
+        CreateAd(img=url, cost=cost, condition=condition, ref=ref)
+
+    else:
+        noPosted+=1
+
+if (noPosted==len(books)):
+    print("No new books to create ads for! Work harder")
+    
+   
+
+
 
     # thinking of using isbn db for getting book covers...
     # https://developers.google.com/books/docs/v1/using#RetrievingVolume
     # https://www.googleapis.com/books/v1/volumes?q=isbn:9781337687669
     # https://syndetics.com/index.php?client=primo&isbn=0495557420/sc.jpg
+    # https://pictures.abebooks.com/isbn/9780357113516-us.jpg
     # https://stackoverflow.com/questions/65562340/high-quality-book-covers-using-google-books-api
 
