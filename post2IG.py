@@ -1,5 +1,7 @@
 from glob import glob
-from instabot import Bot
+# from instabot import Bot
+from instagrapi import Client
+from instagrapi import types
 import os
 from dotenv import load_dotenv
 import shutil
@@ -23,15 +25,21 @@ def clean_up():
 
 def login():
     global bot
-    bot = Bot()
-    bot.login(username=os.getenv("IG_USERNAME"), password=os.getenv("IG_PWD"))
+    # bot = Bot()
+    bot = Client()
+    return bot.login(username=os.getenv("IG_USERNAME"), password=os.getenv("IG_PWD"))
+
     
 
 def upload_post(cap):
     global bot
-    return bot.upload_photo("images/upload.jpg", caption=cap)
+    resp = bot.photo_upload("images/upload.jpg", cap)
+    return resp, type(resp)==types.Media
     
 
+def logout():
+    global bot
+    bot.logout()
 
 if __name__ == '__main__':
     clean_up()

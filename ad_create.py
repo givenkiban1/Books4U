@@ -1,6 +1,7 @@
 from PIL import Image
 from PIL import ImageFont
 from PIL import ImageDraw
+import instagrapi
 import pilgram
 import requests
 
@@ -71,6 +72,11 @@ def CreateAd(title, img, cost, condition, ref, isbn):
     new_im = bg.convert("RGB")
 
     pilgram.clarendon(new_im).save("images/upload.jpg")
-
-    return upload_post( f"The following book is for sale:\n\n{title}\n\nISBN: {isbn}" )
+    
+    resp, valid = upload_post( f"The following book is for sale:\n\n{title}\n\nISBN: {isbn}" )
+    posted = False
+    if (valid):
+        posted = resp.dict()["id"].startswith(str(resp.dict()["pk"])) and len(resp.dict()["pk"])>5
+    
+    return posted and valid
     

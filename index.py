@@ -29,7 +29,7 @@ from dotenv import load_dotenv
 import os
 from ad_create import CreateAd
 from notion_sync import NotionSync
-from post2IG import clean_up, login
+from post2IG import clean_up, login, logout
 
 load_dotenv()
 
@@ -46,7 +46,9 @@ books = data["results"]
 
 noPosted = 0
 # clean_up()
-login()
+if login()==False:
+    print("Could not login to IG Successfully.")
+    exit()
 
 for book in books:
 
@@ -90,7 +92,7 @@ for book in books:
     else:
         noPosted+=1
 
-clean_up()
+logout()
 
 if (noPosted==len(books)):
     print("No new books to create ads for! Work harder")
