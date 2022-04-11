@@ -17,6 +17,7 @@ imageio==2.16.1
 imageio-ffmpeg==0.4.5
 iniconfig==1.1.1
 instabot==0.117.0
+instagrapi==1.16.16
 mock==4.0.3
 moviepy==1.0.3
 notion==0.0.28
@@ -28,6 +29,8 @@ Pillow==9.1.0
 pluggy==1.0.0
 proglog==0.1.9
 py==1.11.0
+pycryptodomex==3.14.1
+pydantic==1.9.0
 pyparsing==3.0.7
 PySocks==1.7.1
 pytest==7.1.1

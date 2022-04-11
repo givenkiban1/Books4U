@@ -1,9 +1,11 @@
+from glob import glob
 from instabot import Bot
 import os
 from dotenv import load_dotenv
 import shutil
 load_dotenv()
 
+bot=None
 
 def clean_up():
     dir = "config"
@@ -19,11 +21,14 @@ def clean_up():
         src = os.path.realpath("images/upload.jpg")
         os.rename(remove_me, src)
 
+def login():
+    global bot
+    bot = Bot()
+    bot.login(username=os.getenv("IG_USERNAME"), password=os.getenv("IG_PWD"))
+    
 
 def upload_post(cap):
-    bot = Bot()
-
-    bot.login(username=os.getenv("IG_USERNAME"), password=os.getenv("IG_PWD"))
+    global bot
     return bot.upload_photo("images/upload.jpg", caption=cap)
     
 

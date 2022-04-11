@@ -29,7 +29,7 @@ from dotenv import load_dotenv
 import os
 from ad_create import CreateAd
 from notion_sync import NotionSync
-from post2IG import clean_up
+from post2IG import clean_up, login
 
 load_dotenv()
 
@@ -45,6 +45,8 @@ print(keys)
 books = data["results"]
 
 noPosted = 0
+# clean_up()
+login()
 
 for book in books:
 
@@ -75,13 +77,20 @@ for book in books:
                 print("Ad created successfully")
             else:
                 print("Could not update notion")
+
         else:
             print("Could not create Ad.")
+
+        for file in os.listdir('./images/'):
+            if file!="canvas.png":
+                os.remove('./images/'+file)
 
         # clean_up()
 
     else:
         noPosted+=1
+
+clean_up()
 
 if (noPosted==len(books)):
     print("No new books to create ads for! Work harder")

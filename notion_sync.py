@@ -23,6 +23,12 @@ class NotionSync:
         response = requests.patch(database_url, headers={"Authorization": f"Bearer {integration_token}", "Content-Type": "application/json", 'Notion-Version': '2022-02-22'},
         data=json.dumps(dataParam))
 
+        # https://egghead.io/lessons/next-js-mutate-database-fields-with-next-js-using-the-notion-api
+        # https://developers.notion.com/reference/patch-page
+        # https://www.postman.com/notionhq/workspace/notion-s-api-workspace/request/15568543-4ed21a83-c1aa-4e3b-b35e-2133faf2ea51
+        # https://github.com/akiomik/pilgram
+        # https://stackoverflow.com/questions/62293200/upload-images-to-instagram-using-python
+
         if response.status_code!=200:
             print(f'Response Status: {response.status_code}')
             print(f'{response.content}')
